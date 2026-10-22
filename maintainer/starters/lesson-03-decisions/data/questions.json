@@ -1,0 +1,14 @@
+{
+  "queue": {
+    "type": "choice",
+    "instructions": "Which support queue should handle the request?",
+    "criteria": {
+      "returns": "Return or exchange of an item that did not fit or is no longer needed",
+      "complaints": "Complaint about the item: defect, breakdown, damage, missing parts, wrong item",
+      "delivery": "Delivery: timing, courier, where the order is",
+      "payment": "Payment and charges",
+      "account": "Account and signing in to the website",
+      "other": "Other: no queue fits"
+    }
+  }
+}

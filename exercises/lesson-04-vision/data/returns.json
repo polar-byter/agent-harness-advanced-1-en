@@ -1,0 +1,32 @@
+[
+ {
+  "order": "A-1042",
+  "item": "electric kettle",
+  "reason": "does not switch on",
+  "photo": "kettle.jpg"
+ },
+ {
+  "order": "A-1043",
+  "item": "smartphone",
+  "reason": "broke during delivery",
+  "photo": "phone.jpg"
+ },
+ {
+  "order": "A-1044",
+  "item": "sneakers",
+  "reason": "wrong size",
+  "photo": "mug.jpg"
+ },
+ {
+  "order": "A-1045",
+  "item": "sneakers",
+  "reason": "wrong size",
+  "photo": "shoes.jpg"
+ },
+ {
+  "order": "A-1046",
+  "item": "electric kettle",
+  "reason": "arrived broken",
+  "photo": "phone.jpg"
+ }
+]

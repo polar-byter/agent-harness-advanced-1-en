@@ -1,0 +1,94 @@
+[
+ {
+  "title": "Back to the Future",
+  "year": 1985,
+  "description": "A teenager is sent thirty years into the past in a scientist's time machine and must make sure his parents meet, or he will never be born.",
+  "tags": [
+   "comedy",
+   "sci-fi",
+   "adventure"
+  ]
+ },
+ {
+  "title": "When Harry Met Sally...",
+  "year": 1989,
+  "description": "Two people who keep running into each other over twelve years argue about whether men and women can ever just be friends.",
+  "tags": [
+   "comedy",
+   "romance"
+  ]
+ },
+ {
+  "title": "Groundhog Day",
+  "year": 1993,
+  "description": "A grumpy weatherman wakes up to the same February morning again and again until he learns to change.",
+  "tags": [
+   "comedy",
+   "fantasy"
+  ]
+ },
+ {
+  "title": "The Hound of the Baskervilles",
+  "year": 1959,
+  "description": "A famous detective and his companion investigate the legend of a ghostly hound on the moors.",
+  "tags": [
+   "detective"
+  ]
+ },
+ {
+  "title": "Battle of Britain",
+  "year": 1969,
+  "description": "Fighter squadrons defend the country's skies during the war: dogfights, losses and short breaks between sorties.",
+  "tags": [
+   "war",
+   "drama"
+  ]
+ },
+ {
+  "title": "The Snowman",
+  "year": 1982,
+  "description": "On a winter night a boy's snowman comes to life and takes him flying over the snowy countryside.",
+  "tags": [
+   "animation",
+   "family"
+  ]
+ },
+ {
+  "title": "Miracle",
+  "year": 2004,
+  "description": "A coach builds a team of college players who take on the Soviet national team on the ice at the 1980 Winter Olympics, chasing every puck.",
+  "tags": [
+   "sports",
+   "drama",
+   "historical"
+  ]
+ },
+ {
+  "title": "Galaxy Quest",
+  "year": 1999,
+  "description": "Actors from an old space show are mistaken for real heroes by aliens and dragged into a conflict between planets.",
+  "tags": [
+   "sci-fi",
+   "comedy"
+  ]
+ },
+ {
+  "title": "The Apartment",
+  "year": 1960,
+  "description": "A shy insurance clerk lends his apartment to his bosses and falls in love with the elevator operator in his office.",
+  "tags": [
+   "comedy",
+   "romance"
+  ]
+ },
+ {
+  "title": "WALL-E",
+  "year": 2008,
+  "description": "A small cleaning robot left alone on an abandoned Earth follows a visiting robot into space.",
+  "tags": [
+   "animation",
+   "sci-fi",
+   "family"
+  ]
+ }
+]

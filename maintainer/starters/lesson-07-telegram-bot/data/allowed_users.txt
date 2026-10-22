@@ -1,0 +1,2 @@
+# Telegram numbers (ids) of family members, one per line.
+# You can find your number by sending the bot the /id command.

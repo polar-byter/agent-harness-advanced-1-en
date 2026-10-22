@@ -1,0 +1,20 @@
+[
+  {"id": "R-101", "text": "I want my money back for the kettle, it won't switch on", "queue": "complaints"},
+  {"id": "R-102", "text": "The kettle broke after a week, give me my money back", "queue": "complaints"},
+  {"id": "R-103", "text": "How do I send back a jacket? The size didn't fit", "queue": "returns"},
+  {"id": "R-104", "text": "The courier was three hours late", "queue": "delivery"},
+  {"id": "R-105", "text": "The order arrived a day later than promised", "queue": "delivery"},
+  {"id": "R-106", "text": "Charged twice for one order", "queue": "payment"},
+  {"id": "R-107", "text": "The payment went through twice, refund the extra", "queue": "payment"},
+  {"id": "R-108", "text": "The phone came in the wrong color, not the one I chose", "queue": "complaints"},
+  {"id": "R-109", "text": "Can I exchange the sneakers for a size larger?", "queue": "returns"},
+  {"id": "R-110", "text": "The delivery did not arrive at the scheduled time", "queue": "delivery"},
+  {"id": "R-111", "text": "The charger is missing from the parcel", "queue": "complaints"},
+  {"id": "R-112", "text": "The box arrived crushed, with a broken mug inside", "queue": "complaints"},
+  {"id": "R-113", "text": "How do I arrange a return?", "queue": "returns"},
+  {"id": "R-114", "text": "Where is my order? The tracking number does not update", "queue": "delivery"},
+  {"id": "R-115", "text": "I can't sign in to my account", "queue": "account"},
+  {"id": "R-116", "text": "The mug arrived broken, I want a replacement", "queue": "complaints"},
+  {"id": "R-117", "text": "The courier was two hours late, and the mug inside turned out to be broken", "queue": "complaints"},
+  {"id": "R-118", "text": "Hello, do you sell gift cards?", "queue": "other"}
+]
