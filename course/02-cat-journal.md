@@ -13,7 +13,7 @@ The task is a joke, but it works like a real one. The Avito analysts from the in
 
 ## Open the starter
 
-Download [the lesson archive](../downloads/lesson-02-cat-journal.zip?raw=true), extract it and open the `lesson-02-cat-journal` folder with **File -> Open**. In the interpreter settings choose the shared course environment: **Add Local Interpreter -> Virtualenv Environment -> Existing** and `C:\Users\Name\agent-venv\Scripts\python.exe`. In the PyCharm terminal install the lesson's dependencies; openpyxl is added to the earlier ones:
+Download [the lesson archive](../downloads/lesson-02-cat-journal.zip?raw=true), extract it and open the `lesson-02-cat-journal` folder with **File -> Open**. In the interpreter settings choose the shared course environment: **Add Local Interpreter -> Virtualenv Environment -> Existing** and `C:\Users\Name\agent-venv\Scripts\python.exe`. If you skipped the environment in lesson 1 because the library was already installed in another interpreter, choose that one. In the PyCharm terminal install the lesson's dependencies; openpyxl is added to the earlier ones:
 
 ```powershell
 python -m pip install --only-binary=:all: -r requirements.txt

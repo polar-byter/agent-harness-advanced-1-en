@@ -18,7 +18,7 @@ Results and published cases are in the [conclusion](conclusion.md).
 
 ## How to work with a starter
 
-Download the lesson archive, extract it with **Extract All** and open the lesson folder in PyCharm with **File -> Open**. Choose the shared course environment `C:\Users\Name\agent-venv` (lesson 1 explains how to create it) and install the dependencies with the command from the lesson. The models live in the shared folder `C:\Users\Name\agent-models`, and `get_models.py` in each starter downloads only the missing ones.
+Download the lesson archive, extract it with **Extract All** and open the lesson folder in PyCharm with **File -> Open**. Choose the shared course environment `C:\Users\Name\agent-venv` (lesson 1 explains why it is needed, how to create it and when you can do without it) and install the dependencies with the command from the lesson. The models live in the shared folder `C:\Users\Name\agent-models`, and `get_models.py` in each starter downloads only the missing ones.
 
 Every starter has:
 

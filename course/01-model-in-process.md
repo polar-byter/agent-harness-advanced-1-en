@@ -19,9 +19,11 @@ The main model of the course is Qwen3-1.7B in the Q8_0 variant, a file of about 
 
 ## One environment for the whole course
 
-In the main course every lesson managed with Python's standard library. Now we need external packages, and installing them again in every lesson folder takes a long time. So we create one virtual environment for the whole course and choose it in PyCharm in every lesson.
+So far the course programs managed with Python's standard library. To run a model inside a program we need the external package `llama-cpp-python`. It goes into a virtual environment: a separate folder with its own Python and packages. This keeps the course packages apart from your other projects, and you can remove them together with the folder. The environment is created once for the whole course, and in every lesson you choose it in PyCharm.
 
-Download [the lesson archive](../downloads/lesson-01-runtime.zip?raw=true), extract it with **Extract All** and open the `lesson-01-runtime` folder in PyCharm with **File -> Open**.
+You need the environment only to run the real model: `demo.py` in this lesson and the examples in the following ones. `demo_check.py` and the tests work without it.
+
+**First check whether you need this step.** Download [the lesson archive](../downloads/lesson-01-runtime.zip?raw=true), extract it with **Extract All** and open the `lesson-01-runtime` folder in PyCharm with **File -> Open**. Open `check_install.py` and choose **Run 'check_install'**. If the Run window shows the line `Library loaded: 0.3.36`, the library is already installed in this project's interpreter: go to [Download the model](#download-the-model). If it says `The library did not load yet`, create the environment:
 
 1. Open **File -> Settings -> Project: lesson-01-runtime -> Python Interpreter** and click **Add Interpreter -> Add Local Interpreter**.
 2. Choose **Virtualenv Environment** and the **New** option. In **Location** enter `C:\Users\Name\agent-venv`, where `Name` is your user folder. In **Base interpreter** choose Python 3.14. Click **OK**.
@@ -33,9 +35,9 @@ python -m pip install --only-binary=:all: -r requirements.txt
 
 The `--only-binary=:all:` flag allows only ready packages: if there is no suitable one for your system, the installation stops with a clear error instead of starting to build C++. `requirements.txt` holds the address of the `llama-cpp-python` 0.3.36 build for Windows x64, which works with any version of Python 3.
 
-4. Open `check_install.py` and choose **Run 'check_install'**. The Run window shows the path to Python, the line `Library loaded: 0.3.36` and the models folder. If the terminal reported a successful installation but `check_install` did not find the library, the project and the terminal use different interpreters: check step 1.
+4. Run `check_install.py` again. The Run window shows the path to Python, the line `Library loaded: 0.3.36` and the models folder. If the terminal reported a successful installation but `check_install` did not find the library, the project and the terminal use different interpreters: check step 1.
 
-In the following lessons you do not create the environment again. In the same **Add Local Interpreter** window choose **Virtualenv Environment -> Existing** and point to `C:\Users\Name\agent-venv\Scripts\python.exe`.
+In the following lessons you do not create the environment again: in the same **Add Local Interpreter** window choose **Virtualenv Environment -> Existing** and point to `C:\Users\Name\agent-venv\Scripts\python.exe`. If the library is installed in another interpreter on your computer, you can choose that one instead.
 
 ## Download the model
 
