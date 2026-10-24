@@ -35,6 +35,6 @@ Code is released under the [MIT License](LICENSE). Lesson texts and images are r
 <details>
 <summary>For course maintenance</summary>
 
-[Editing rules](AGENTS.md) / [Build and checks](maintainer/README.md) / [Work log](maintainer/WORK_LOG.md)
+[Build and checks](maintainer/README.md)
 
 </details>

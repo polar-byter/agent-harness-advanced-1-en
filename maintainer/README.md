@@ -30,4 +30,4 @@ python tools/check_solutions.py
 
 `check_solutions.py` substitutes the reference solutions in temporary copies, runs `tests/test_lesson.py` and `demo_check.py` and compares the output with the `expected` field of the course map. This checks the starters and tests, not model quality.
 
-Runs on real models are done by hand: download the models into a folder outside the repository, set `AGENT_MODELS_DIR` and run `demo.py` in copies with the solutions applied. Record the results in `WORK_LOG.md`, and quote in lessons only results from such runs.
+Runs on real models are done by hand: download the models into a folder outside the repository, set `AGENT_MODELS_DIR` and run `demo.py` in copies with the solutions applied. Quote in lessons only results from such runs.
