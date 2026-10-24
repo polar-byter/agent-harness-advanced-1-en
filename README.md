@@ -28,6 +28,10 @@ In every starter everything written earlier already works, and the current funct
 
 Windows 10 or 11 x64, 8 GB of memory (16 is better), about 5 GB of disk space for the models, Python 3.14 and PyCharm. No graphics card is needed. The libraries install as ready packages, and the models are downloaded by `get_models.py` into a shared folder used by all lessons.
 
+## License
+
+Code is released under the [MIT License](LICENSE). Lesson texts and images are released under [CC BY-NC-SA 4.0](LICENSE-CONTENT.md): you may use and adapt them with credit, for non-commercial purposes, under the same license.
+
 <details>
 <summary>For course maintenance</summary>
 
