@@ -13,9 +13,15 @@ Dmitry Kolesnikov from Wildberries describes a similar scheme in [an article on 
 
 ## A vision model from two files
 
-We take Qwen3-VL-2B from the [official Qwen repository](https://huggingface.co/Qwen/Qwen3-VL-2B-Instruct-GGUF). It consists of two files. The language part `Qwen3VL-2B-Instruct-Q4_K_M.gguf` (about 1.1 GB) writes the answer, like Qwen3 from the earlier lessons. The projector `mmproj-Qwen3VL-2B-Instruct-Q8_0.gguf` (about 450 MB) turns the picture into a set of vectors that the language part takes instead of words. `load_vision` from `local_llm.py` loads them together.
+The language model from the earlier lessons understands only text. Before computing anything, it turns every word into a set of numbers and then works with those. For it to see a photo, the picture has to be turned into such numbers too. A separate part of the model does that - the projector - which is why a vision model comes as two files.
+
+We take Qwen3-VL-2B from the [official Qwen repository](https://huggingface.co/Qwen/Qwen3-VL-2B-Instruct-GGUF). The language part `Qwen3VL-2B-Instruct-Q4_K_M.gguf` (about 1.1 GB) writes the answer, like Qwen3 from the earlier lessons. The projector `mmproj-Qwen3VL-2B-Instruct-Q8_0.gguf` (about 450 MB) cuts the picture into small patches and turns each into numbers that the language part reads the same way as words. `load_vision` from `local_llm.py` loads both files together.
 
 On the computer where the course was checked, Qwen3-VL-2B took 7 to 10 seconds per photo and answered all five claims of this lesson correctly.
+
+<img src="../assets/lesson-04-photo.gif" width="480" alt="A claim photo and the decision on it">
+
+[Static version](../assets/lesson-04-photo.png).
 
 ## Open the starter
 
@@ -119,9 +125,5 @@ Claim A-1042 shows the limit of the method: the kettle "does not switch on", and
 ## What we have now
 
 The vision model sorted the claims in three directions, and the decision about money stayed with the employee. The program relies only on the yes/no fields, the order of fields in the schema helps the model look at the object first and compare afterwards, and the model's free text goes to a person as a hint.
-
-<img src="../assets/lesson-04-photo.gif" width="480" alt="A claim photo and the decision on it">
-
-[Static version](../assets/lesson-04-photo.png).
 
 Next: [lesson 5. The model in a web service](05-movie-service.md).

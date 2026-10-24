@@ -13,13 +13,19 @@ In lesson 2 the model already assigned journal entries to categories, but it ans
 
 ## Models that do not write text
 
-In September 2026 TypeSafe AI released the Jev model and called it the first model of a new class, System One. Jev does not hold a conversation or write replies to customers. It receives a state - text or JSON with data - and questions about it, and returns answers of a given type with probabilities. The program uses them directly, without parsing text. There are three question types ([TypeSafe documentation](https://docs.typesafe.ai/concepts/system-one)):
+Every model we have used so far works like someone you chat with: it gets a message and writes an answer. That is handy for a letter to a customer, but for a program that needs a decision the text gets in the way. It has to be parsed, and at any moment the model may add a polite opening or name the queue with a different word. That is why in lesson 1 we made the model answer by a JSON schema, and in lesson 2 choose from a list of categories.
 
-| Type | What we ask | What comes back |
-|---|---|---|
-| `choice` | Which option from a list fits | `choice` - the chosen option, `confidence` and the probabilities of all options |
-| `score` | Which level on a scale | `score` - the level and the probabilities of the levels |
-| `noul` | Yes or no | `noul` - the probability of "yes", from 0 to 1 |
+The same task can be approached from another side. The psychologist Daniel Kahneman described two systems of thinking in his book "Thinking, Fast and Slow". System 1 works instantly and without effort: reading "The courier was three hours late", the operator sees at once that it is about delivery and weighs nothing. System 2 switches on when you need to think, for example to write a customer a detailed reply or to sort out a disputed case. Most of the duty operator's work is quick decisions of the first kind.
+
+The Jev model is built on this idea. TypeSafe AI released it in September 2026 and called it the first model of a new class, System One, after Kahneman's System 1. Jev does not write text at all: no replies to customers, no code, no explanations of its reasoning. You give it data, such as the request text or JSON, and ask closed questions about it. It answers each question in a form set in advance and says how sure it is, and the program puts the answer to work straight away.
+
+Jev has three kinds of questions ([TypeSafe documentation](https://docs.typesafe.ai/concepts/system-one)). Here is how each could sound in our support team; the numbers in the examples are made up to illustrate:
+
+- **`choice` - pick an option from a list.** "Which queue should handle the request: returns, complaints, delivery or payment?" Jev might answer `"choice": "delivery"` with a confidence of 0.93 and show the probabilities of all the options. This is the kind of question we write today.
+- **`score` - place the request on a scale.** "How upset is the customer: 0 - calm, 1 - unhappy, 2 - very angry?" The answer can fall between levels, for example `"score": 1.4`: the customer is unhappy and close to angry. With such a score a request can be moved up the queue.
+- **`noul` - answer yes or no.** This is what Jev calls the simplest question: "Is the customer asking for their money back?" The answer is the probability of "yes" from 0 to 1, for example `"noul": 0.95`.
+
+Questions can be asked together, and the answers combined in your own code. The TypeSafe documentation walks through a refund request this way. Jev is asked separately whether the customer wants their money back, whether it looks like a double charge and whether the store's policy allows a refund. From these answers and ordinary checks the program decides whether to issue the refund at once or to hand the case to a person. By the end of the lesson we will add a second question to the queue choice in the same way.
 
 A question is written as a dictionary: the type, the question text in `instructions` and the options with descriptions in `criteria`. Here is a request to Jev with one question for our support team:
 
@@ -42,9 +48,9 @@ A question is written as a dictionary: the type, the question text in `instructi
 
 The answer under the same key `queue` is a dictionary like `{"type": "choice", "choice": "delivery", "confidence": ..., "probabilities": {...}}`.
 
-An analyst should look closely at where the rules live here. They are written in the set of questions with options and descriptions, and that is essentially the system's requirements, only in a form the model executes directly. An option's description affects the decision just as a category's description did in lesson 2, and the confidence threshold determines how many requests go to people. An analyst who has run such a set of questions on labeled requests comes to the developers with a ready rule and a measured result. Many analysts can describe an ordinary integration; few understand an integration with a model where every decision has a probability and a threshold.
+Notice where the routing rules live here: in the questions, the answer options and their descriptions. That is essentially the system's requirements, only the model executes them directly. As in lesson 2, an option's description shapes what the model picks, and the confidence threshold decides how many requests go to people. If you first run the questions on requests with known answers, you can come to the developers with a ready rule and a measured result. Many people can describe an ordinary integration; few understand an integration with a model where every decision has a probability and a threshold.
 
-As of 2026-10-22 Jev is available only through the TypeSafe API: the model weights are not published, you cannot install it on your own computer, and the request text goes to the company's servers. In our course the model runs inside the program, so we reproduce the same question and answer format on Qwen3-1.7B from lesson 1. For those with an API key, the starter has a ready call to the real Jev with the same questions.
+Jev's weights are not published, so you cannot install it on your own computer. You can reach it through the TypeSafe API or through OpenRouter, which you connected in the main course, and the request text then leaves your machine. To see how such a model works inside, we first reproduce Jev's question and answer format on Qwen3-1.7B from lesson 1. At the end of the lesson the same questions can go to the real Jev through OpenRouter or to an open replacement that runs on your CPU.
 
 ## Where the probabilities come from
 
@@ -58,7 +64,11 @@ The ready function `option_probabilities` in `decisions.py` does this. It receiv
 2. It calls `model.create_completion` with `max_tokens=1`. The `logits_processor` parameter is a list of functions the library calls with the scores of all tokens before choosing. Our `remember` function keeps a copy of them.
 3. It takes the scores of the number tokens and turns them into probabilities.
 
-These are the model's own probabilities, not the share of its correct answers. A small model can be 1.00 sure and still be wrong. TypeSafe writes that Jev's calibration is checked on large groups of answers, and a single answer may turn out wrong. How far our model can be trusted we will check against the markup.
+These probabilities show how sure the model is, not how often it is right: a small model can be 1.00 sure and still be wrong. TypeSafe writes that Jev's calibration is checked on large groups of answers, and a single answer may turn out wrong. How far our model can be trusted we will check on requests with known answers.
+
+<img src="../assets/lesson-03-decisions.gif" width="480" alt="How a request reaches a queue">
+
+[Static version](../assets/lesson-03-decisions.png).
 
 ## Open the starter
 
@@ -71,7 +81,8 @@ Download [the lesson archive](../downloads/lesson-03-decisions.zip?raw=true), op
 | `decisions.py` | Option probabilities, answers to questions and routing. We write `ask_choice` here |
 | `demo_check.py` | A check of the function on a stand-in model |
 | `demo.py` | Routing all requests with the real model |
-| `jev_client.py`, `demo_jev.py` | The same questions for the real Jev, if you have an API key |
+| `jev_client.py`, `demo_jev.py` | The same questions for the real Jev through OpenRouter |
+| `frida_client.py`, `demo_frida.py` | The same questions for the open FRIDA-Decisions model on your CPU |
 
 ## Look at the data
 
@@ -188,22 +199,74 @@ R-118 went to a person. Look at R-105 and R-110 as well: the model answered "no"
 
 When the course was prepared, the model chose payment with a confidence of 1.00, and the program sent the request to the wrong queue on its own. The model reads the customer's text together with the question and may follow what is written in it as an instruction. For an administrator this gives a simple rule: on the model's decision the program may forward a request, but refunds, access changes and other irreversible actions happen only after a person checks them. Delete R-119.
 
-## The real Jev
+## The same questions for a real decision model
 
-If you have a TypeSafe API key, you can ask Jev the same questions. In PyCharm open **Run -> Edit Configurations...**, choose the `demo_jev` configuration (it appears after the file is first run), add `TYPESAFE_API_KEY=your_key` in **Environment variables** and run `demo_jev.py`. The key does not end up in the code or the project archive.
+Our Qwen3 writes text and only imitates a decision model: we pull the probabilities out of its scores ourselves. The same `questions.json` can go to a model trained to answer exactly such questions, and the results can be compared on the same markup. There are two ways, pick the one that suits what you have. Both take the request and the questions in Jev's format and return an `answers` dictionary of the same shape that `decide` builds. So `route` and the markup comparison work unchanged; only the source of the answers changes.
 
-`ask_jev` from `jev_client.py` sends a POST request to `https://api.typesafe.ai/v1/systemone` with the request, the model name `jev-latest` and the questions from the same `questions.json`. From the response it returns the `answers` dictionary - the same as the one `decide` builds. So `route`, the damage rule and the markup comparison work unchanged: only the source of the answers changed.
+The results below were obtained when the course was prepared with the single `queue` question, as at the start of the lesson. If you have already added `order`, the lines will carry marks for the second question.
 
-The requests go to TypeSafe's servers. With training data that is no problem, but real customer requests may be sent only with permission from the data owner and the security team. That is exactly why Avito, from the introduction, did its labeling on a local model.
+### Way 1. Jev through OpenRouter
 
-No API key was available when the course was prepared. `ask_jev` was checked only by the lesson's test: a stand-in server on your computer accepts the request and answers with an example from the TypeSafe documentation. How the real Jev would route our requests was not checked.
+If you connected OpenRouter with `configure_model.py` in the main course, the key is already saved, and `jev_client.py` takes it from there. You can also set the key in the `OPENROUTER_API_KEY` environment variable: in PyCharm that is the **Environment variables** field in **Run -> Edit Configurations...**. Open `demo_jev.py` and choose **Run 'demo_jev'**.
+
+`ask_jev` sends a POST request to `https://openrouter.ai/api/alpha/decisions` - the OpenRouter API for decision models. The request carries the model name `typesafe/jev-1.14`, the request text and the questions. Jev charges only for input tokens. As of 2026-10-24 Jev 1.13 on OpenRouter costs $0.042 per million, so a run over eighteen short requests costs a fraction of a cent; check the current price on the model page. When the course was prepared, the output was (some lines omitted):
+
+```text
+R-101 person     complaints 0.52         I want my money back for the kettle, it won't switch on
+R-102 person     complaints 0.71         The kettle broke after a week, give me my money back
+...
+R-117 person     complaints 0.76         The courier was two hours late, and the mug inside turned out to be broken
+R-118 person     other 0.65              Hello, do you sell gift cards?
+Threshold 0.9. Routed by the program: 14, matching the markup: 14. To a person: 4.
+```
+
+Jev made no mistakes. The gift card question that our Qwen sent to payment with a confidence of 1.00 it put under "other", and it gave the doubtful kettle requests and R-117 to a person.
+
+The requests go to OpenRouter and TypeSafe. With training data that is no problem, but real customer requests may be sent outside only with permission from the data owner and the security team. That is exactly why Avito, from the introduction, did its labeling on a local model.
+
+### Way 2. FRIDA-Decisions on your CPU
+
+If you have no OpenRouter connection or the data may not leave your machine, take an open decision model. Many appeared after Jev, but most of them need a graphics card. For an ordinary laptop we chose [FRIDA-Decisions](https://github.com/ai-forever/FRIDA-Decisions) from Sber, MIT license. It was trained on 71% Russian and 29% English texts and understands the same `choice`, `score` and `noul` questions. On the computer where the course was checked, the model took about 1.8 GB of memory and answered a request in 0.4 seconds without a graphics card. We also tried THX-01, an open model of the same class from Hugging Face: on our Russian requests it chose the queue worse and took 4.6 GB of memory.
+
+Install the library in the PyCharm terminal, the command is one line:
+
+```powershell
+python -m pip install --only-binary=:all: "frida-decisions[onnx] @ https://github.com/ai-forever/FRIDA-Decisions/archive/refs/tags/v0.4.0.zip"
+```
+
+Open `demo_frida.py` and choose **Run 'demo_frida'**. On the first run `load_frida` downloads about 1.2 GB into the shared models folder, `C:\Users\Name\agent-models\FRIDA-Decisions`. When the course was prepared, the output was:
+
+```text
+R-101 person     returns 0.79            I want my money back for the kettle, it won't switch on
+...
+R-104 person     delivery 0.78           The courier was three hours late
+...
+R-106 person     payment 0.30            Charged twice for one order
+...
+R-117 person     complaints 0.90         The courier was two hours late, and the mug inside turned out to be broken
+R-118 person     other 0.25              Hello, do you sell gift cards?
+Threshold 0.9. Routed by the program: 8, matching the markup: 8. To a person: 10.
+On average 0.4 s per request
+```
+
+Ten requests out of eighteen went to a person, although FRIDA chose the right queue for most of them. The reason is that FRIDA calls a different quantity confidence. In our `ask_choice` confidence is the probability of the chosen option. FRIDA looks at how much the probabilities gather on one option: if delivery has 0.80 and the other 0.20 is spread over the remaining options, the confidence comes out noticeably lower than 0.80. The 0.90 of R-117 is rounded; the exact value is just below the threshold. A threshold chosen for one model does not carry over to another.
+
+Choose it yourself: in `demo_frida.py` replace `THRESHOLD = 0.9` with `0.7` and run it again. When the course was prepared, the program routed thirteen requests, twelve matched the markup and five went to a person. The one mistake was R-101: FRIDA sent it to returns with a confidence of 0.79.
+
+The payment rule from this lesson does not suit FRIDA. To the question "Is the customer writing about an order they have already placed?" it gave "Charged twice for one order" a probability of 0.27 and the gift card question 0.68, so the rule would work the wrong way round. A rule checked on one model is checked again on the same markup when the model changes.
+
+Here are the three runs side by side, each with the single `queue` question:
+
+| Who answered | Threshold | Routed by the program | Matching the markup | To a person |
+|---|---|---|---|---|
+| Qwen3-1.7B, our `ask_choice` | 0.9 | 18 | 17 | 0 |
+| Jev through OpenRouter | 0.9 | 14 | 14 | 4 |
+| FRIDA-Decisions on the CPU | 0.7 | 13 | 12 | 5 |
+
+This is the kind of table worth bringing to the developers and the manager: it shows how much manual work each model takes away, how many mistakes it makes and what you pay for it - money for the requests or the operators' time.
 
 ## What we have now
 
-The model answers closed questions with probabilities, and the program decides: the threshold sends unclear requests to a person, and the store's rule is written in code. Accuracy depends on the option descriptions and the markup no less than on the model, and that is an analyst's work. At the start of the lesson the operator handled every request; now the program routes most of them itself. A manager sees which requests the program routed and which it gave to people, and can move the threshold if the share of manual work or the number of errors is not acceptable.
-
-<img src="../assets/lesson-03-decisions.gif" width="480" alt="How a request reaches a queue">
-
-[Static version](../assets/lesson-03-decisions.png).
+The model answers closed questions with probabilities, and the program decides: the threshold sends unclear requests to a person, and the store's rule is written in code. Accuracy depends on the option descriptions and the markup no less than on the model, and that part of the work belongs to whoever describes the rules. At the start of the lesson the operator handled every request; now the program routes most of them itself. A manager sees which requests the program routed and which it gave to people, and can move the threshold if the share of manual work or the number of errors is not acceptable.
 
 Next: [lesson 4. A vision model checks the photo](04-vision.md).

@@ -23,6 +23,10 @@ Search in RAG systems rests on embeddings: the program finds fragments of docume
 
 We take Qwen3-Embedding-0.6B from the [official Qwen repository](https://huggingface.co/Qwen/Qwen3-Embedding-0.6B-GGUF): a file of about 640 MB that works through the same `llama-cpp-python` library. A short explanation of the task is put before the query text; ours is "Instruct: Find a movie from the viewer's description". Qwen3-Embedding was trained with such explanations, and they tell the model which kind of similarity we care about: by the film's content, not, for example, by writing style.
 
+<img src="../assets/lesson-05-service.gif" width="480" alt="Search by meaning inside a web service">
+
+[Static version](../assets/lesson-05-service.png).
+
 ## Open the starter and start the service
 
 Download [the lesson archive](../downloads/lesson-05-movie-service.zip?raw=true), open the `lesson-05-movie-service` folder in PyCharm and choose the shared course environment. Install the dependencies in the terminal; Flask is added to the earlier ones.
@@ -144,9 +148,5 @@ Finally, **Run 'run'** again and open http://127.0.0.1:5000. Use the form to add
 ## What we have now
 
 The model entered the service through one class with the familiar `find` method and one line at the composition point. The service did not become dependent on the model: it can run with the word search, be checked on a stand-in model and change its search method without touching the pages or the database.
-
-<img src="../assets/lesson-05-service.gif" width="480" alt="Search by meaning inside a web service">
-
-[Static version](../assets/lesson-05-service.png).
 
 Next: [lesson 6. Transcribing a voice message](06-speech.md).

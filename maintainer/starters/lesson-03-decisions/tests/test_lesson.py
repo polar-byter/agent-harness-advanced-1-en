@@ -1,18 +1,22 @@
 import json
+import os
 import sys
+import tempfile
 import threading
 import unittest
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from pathlib import Path
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from decisions import ask_choice, decide, read_json, route
 from demo_check import ExampleModel
-from jev_client import ask_jev
+from frida_client import ask_frida
+from jev_client import ask_jev, openrouter_key
 
-# A response from the TypeSafe documentation (docs.typesafe.ai, Quick Start), cut down to two questions.
-JEV_RESPONSE = {'model': 'jev-1.13.0', 'answers': {
+# A response shaped like the example in the OpenRouter Decisions API documentation, cut down to two questions.
+JEV_RESPONSE = {'id': 'gen-dec-1', 'model': 'typesafe/jev-1.14', 'provider': 'TypeSafe', 'answers': {
     'queue': {'type': 'choice', 'choice': 'delivery', 'confidence': 1.0,
               'probabilities': {'delivery': 1.0, 'payment': 0.0}},
     'damaged': {'type': 'noul', 'noul': 0.02}}, 'usage': {'input_tokens': 428, 'output_tokens': 73}}
@@ -33,6 +37,18 @@ class FakeJev(BaseHTTPRequestHandler):
 
     def log_message(self, *args):
         pass
+
+
+class FakeJudge:
+    """A stand-in FRIDA: remembers the request and answers in its format."""
+
+    def __init__(self):
+        self.requests = []
+
+    def judge(self, request):
+        self.requests.append(request)
+        return {'answers': {'queue': {'type': 'choice', 'choice': 'delivery', 'confidence': 0.9,
+                                      'probabilities': {'delivery': 0.97, 'payment': 0.03}}}}
 
 
 class LessonTests(unittest.TestCase):
@@ -59,20 +75,39 @@ class LessonTests(unittest.TestCase):
         server = HTTPServer(('127.0.0.1', 0), FakeJev)
         threading.Thread(target=server.serve_forever, daemon=True).start()
         try:
-            url = f'http://127.0.0.1:{server.server_port}/v1/systemone'
+            url = f'http://127.0.0.1:{server.server_port}/api/alpha/decisions'
             answers = ask_jev('The courier was three hours late', self.questions, api_key='test-key', url=url)
         finally:
             server.shutdown()
             server.server_close()
         path, authorization, body = FakeJev.received[-1]
-        self.assertEqual((path, authorization), ('/v1/systemone', 'Bearer test-key'))
-        self.assertEqual(body, {'state': 'The courier was three hours late', 'model': 'jev-latest',
+        self.assertEqual((path, authorization), ('/api/alpha/decisions', 'Bearer test-key'))
+        self.assertEqual(body, {'model': 'typesafe/jev-1.14', 'state': 'The courier was three hours late',
                                 'questions': self.questions})
         self.assertEqual(route(answers), 'delivery')
 
     def test_jev_needs_key(self):
         with self.assertRaises(ValueError):
             ask_jev('text', self.questions, api_key='')
+
+    def test_key_from_main_course_connection(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / 'connection.json'
+            path.write_text(json.dumps({'provider': 'openrouter', 'model': 'openrouter/free',
+                                        'api_key': 'from-file'}), encoding='utf-8')
+            with mock.patch.dict(os.environ, {'HARNESS_CONNECTION_FILE': str(path)}):
+                os.environ.pop('OPENROUTER_API_KEY', None)
+                self.assertEqual(openrouter_key(), 'from-file')
+                path.write_text(json.dumps({'provider': 'ollama', 'model': 'qwen3:0.6b'}), encoding='utf-8')
+                with self.assertRaises(ValueError):
+                    openrouter_key()
+
+    def test_frida_request(self):
+        judge = FakeJudge()
+        answers = ask_frida(judge, 'The courier was three hours late', self.questions)
+        self.assertEqual(judge.requests[-1], {'state': 'The courier was three hours late', 'questions': self.questions})
+        self.assertEqual(route(answers, threshold=0.7), 'delivery')
+        self.assertEqual(route(answers), 'delivery')
 
 
 if __name__ == '__main__':

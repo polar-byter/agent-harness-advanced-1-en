@@ -92,7 +92,7 @@ def describe(request: dict, answers: dict, threshold: float = 0.9) -> str:
 
 
 def compare_with_markup(results: list, threshold: float = 0.9) -> dict:
-    """Compare the program's decisions with the analyst's markup in each request's queue field."""
+    """Compare the program's decisions with the markup in each request's queue field."""
     report = {'auto': 0, 'correct': 0, 'manual': [], 'wrong': []}
     for request, answers in results:
         decision = route(answers, threshold)
@@ -105,3 +105,14 @@ def compare_with_markup(results: list, threshold: float = 0.9) -> dict:
         else:
             report['wrong'].append((request['id'], decision, answers['queue']['confidence'], request['queue']))
     return report
+
+
+def print_report(results: list, threshold: float = 0.9) -> None:
+    """The same report for any source of answers: Qwen3, Jev or FRIDA."""
+    for request, answers in results:
+        print(describe(request, answers, threshold))
+    report = compare_with_markup(results, threshold)
+    print(f'Threshold {threshold}. Routed by the program: {report["auto"]}, '
+          f'matching the markup: {report["correct"]}. To a person: {len(report["manual"])}.')
+    for number, decision, confidence, expected in report['wrong']:
+        print(f'  Mismatch: {number} -> {decision} with confidence {confidence:.2f}, markup says {expected}')

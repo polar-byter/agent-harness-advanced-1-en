@@ -48,6 +48,10 @@ Segment(t0=744, t1=1164, text=' Two weeks ago I bought an electric kettle from y
 
 The time here is in hundredths of a second: 744 is 7.44 seconds. The text starts with a space; that is a quirk of Whisper.
 
+<img src="../assets/lesson-06-speech.gif" width="480" alt="From a voice message to a request card">
+
+[Static version](../assets/lesson-06-speech.png).
+
 ## Your turn
 
 `transcribe` receives the loaded Whisper model and the sound as numbers and has to return lines like `[00:07] Two weeks ago...`. The time mark is for the operator: with it they can quickly find the place in the recording and listen again. Replace the line `raise NotImplementedError(...)` with the fragment below and fill in the three gaps:
@@ -109,9 +113,5 @@ ffmpeg -i recording.m4a -ar 16000 -ac 1 data\my.wav
 ## What we have now
 
 Two models work as a chain: Whisper turns sound into text with time marks, and Qwen3 turns the text into a card by a schema. An error at the first step passes into the second, so the operator sees the card next to the transcript with the time marks that let them listen to the recording again.
-
-<img src="../assets/lesson-06-speech.gif" width="480" alt="From a voice message to a request card">
-
-[Static version](../assets/lesson-06-speech.png).
 
 Next: [lesson 7. A Telegram bot on a local model](07-telegram-bot.md).

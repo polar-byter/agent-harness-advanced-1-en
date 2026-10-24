@@ -13,9 +13,17 @@ Now the model becomes part of our program. The model file is loaded into its mem
 
 ## Who does the computing
 
-The llama.cpp engine computes, and the `llama-cpp-python` library gives access to it from Python. There is a ready build for Windows, so nothing has to be compiled. The model is stored in a GGUF file: inside are the trained parameters and the information needed to load them.
+In the main course someone else's program did the computing: the service's servers for OpenRouter, a separate application on your computer for Ollama. Our program only sent them text and waited for the answer. Now it will compute by itself, and for that it needs an engine - code that can load a trained model and run text through it.
+
+Our engine is llama.cpp, one of the most popular ways to run models on an ordinary processor. It is written in C++, and Python reaches it through the `llama-cpp-python` library. There is a ready build for Windows, so nothing has to be compiled.
+
+The engine reads the model itself from a GGUF file. It holds everything the model learned in training - its parameters, more than a billion numbers - and the information needed to load them. To make such a file fit into a laptop's memory, the numbers are stored compressed, and the level of compression shows in the file name. In the Q8_0 variant each parameter takes about 8 bits instead of 16 in the original model: the file is half the size, and the quality of the answers usually barely changes. The Q4_K_M variant you will meet in lesson 4 is compressed even more.
 
 The main model of the course is Qwen3-1.7B in the Q8_0 variant, a file of about 1.8 GB, from the [official Qwen repository](https://huggingface.co/Qwen/Qwen3-1.7B-GGUF). In the main course we used the smaller Qwen3-0.6B, but it is a bit weak for the stage 2 tasks: when the course was prepared, it sorted nine of the twelve cat-journal entries from lesson 2 correctly, and Qwen3-1.7B eleven. If your laptop is very weak, you can still take 0.6B; the way to do it is described below. On the computer where the course was checked, a short answer from 1.7B took about a second; on an ordinary laptop it takes a few seconds.
+
+<img src="../assets/lesson-01-ask.gif" width="480" alt="How ask calls the model">
+
+[Static version](../assets/lesson-01-ask.png).
 
 ## One environment for the whole course
 
@@ -145,9 +153,5 @@ The words of the first answer will be different for you, and the time depends on
 ## What we have now
 
 `ask` is the only door to the language model in the whole course: a rule and data go in, text or a dictionary comes out. In the following lessons `local_llm.py` sits ready in the starter, and you call `ask` from your own functions. If you recall the agent loop from the main course, `ask` takes the place of `send_live` in it: it receives messages and returns the model's decision, and the program still decides what to do with that decision.
-
-<img src="../assets/lesson-01-ask.gif" width="480" alt="How ask calls the model">
-
-[Static version](../assets/lesson-01-ask.png).
 
 Next: [lesson 2. The cat's mischief journal](02-cat-journal.md) - the first application with a window and a JSON schema in practice.

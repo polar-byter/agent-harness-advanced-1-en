@@ -19,6 +19,10 @@ Our bot uses long polling: the program itself asks Telegram's servers whether th
 
 For an administrator the boundary matters here: the model runs on your laptop, but the messages themselves pass through Telegram's servers. For a cat journal that is no problem; work data should be sent through such a bot only if that is allowed.
 
+<img src="../assets/lesson-07-bot.gif" width="480" alt="A message's path through the bot">
+
+[Static version](../assets/lesson-07-bot.png).
+
 ## Create the bot
 
 1. In Telegram find `@BotFather` - the official bot for creating bots, with a blue check mark.
@@ -140,9 +144,5 @@ For the bot to add to the journal, the laptop must be on and `bot.py` running.
 ## What we have now
 
 The bot receives messages from the family, lets only people from the allow list into the journal, sorts the entries with the same model as the utility from lesson 2 and writes to the same Excel file. The bot's logic is kept separate from Telegram, so it can be checked without a network, and the token is stored outside the project.
-
-<img src="../assets/lesson-07-bot.gif" width="480" alt="A message's path through the bot">
-
-[Static version](../assets/lesson-07-bot.png).
 
 Next: [conclusion](conclusion.md).

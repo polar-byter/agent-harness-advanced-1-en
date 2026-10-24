@@ -61,6 +61,10 @@ Sorting twelve entries together with the bulletin can take tens of seconds on a 
 
 </details>
 
+<img src="../assets/lesson-02-journal.gif" width="480" alt="An Excel journal becomes a review">
+
+[Static version](../assets/lesson-02-journal.png).
+
 ## Categories with explanations
 
 Open `journal_ai.py`. At the top is the dictionary of categories:
@@ -148,9 +152,5 @@ This is what work with classification looks like in practice: run a set of entri
 ## What we have now
 
 The utility reads a journal from Excel, sorts the entries by a fixed list of categories and saves the result back into the file. Here the model is responsible for one narrow action, and a person checks the labeling against test entries. We will meet the same journal again: in lesson 7 a Telegram bot writes new mischief into it.
-
-<img src="../assets/lesson-02-journal.gif" width="480" alt="An Excel journal becomes a review">
-
-[Static version](../assets/lesson-02-journal.png).
 
 Next: [lesson 3. A model that makes decisions](03-decisions.md).
